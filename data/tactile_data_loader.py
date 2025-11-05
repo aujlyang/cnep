@@ -239,13 +239,24 @@ def create_feature_extractor(model_name: str = 'mobilenet_v2', device: str = 'cp
     from torchvision import models
     
     if model_name == 'mobilenet_v2':
-        model = models.mobilenet_v2(pretrained=True)
+        try:
+            # Try new API first (torchvision >= 0.13)
+            model = models.mobilenet_v2(weights=models.MobileNet_V2_Weights.IMAGENET1K_V1)
+        except (AttributeError, TypeError):
+            # Fall back to old API for compatibility
+            model = models.mobilenet_v2(pretrained=True)
         model.classifier = torch.nn.Identity()
     elif model_name == 'resnet18':
-        model = models.resnet18(pretrained=True)
+        try:
+            model = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
+        except (AttributeError, TypeError):
+            model = models.resnet18(pretrained=True)
         model.fc = torch.nn.Identity()
     elif model_name == 'resnet50':
-        model = models.resnet50(pretrained=True)
+        try:
+            model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)
+        except (AttributeError, TypeError):
+            model = models.resnet50(pretrained=True)
         model.fc = torch.nn.Identity()
     else:
         raise ValueError(f"Unknown model: {model_name}")

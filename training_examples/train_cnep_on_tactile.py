@@ -313,7 +313,6 @@ print("Starting training...")
 print("="*70)
 
 # Create output directory
-timestamp = int(torch.cuda.Event(enable_timing=False).record() if torch.cuda.is_available() else 0)
 import time
 timestamp = int(time.time())
 root_folder = f'../outputs/tactile/cnep/{timestamp}/'

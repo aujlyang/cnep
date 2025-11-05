@@ -36,7 +36,9 @@ if data_folder_path not in sys.path:
 from cnep import CNEP
 from tactile_data_loader import TactileDataset, create_feature_extractor
 
-torch.set_float32_matmul_precision('high')
+# Set matmul precision for PyTorch 2.0+ (optional for older versions)
+if hasattr(torch, 'set_float32_matmul_precision'):
+    torch.set_float32_matmul_precision('high')
 
 
 def get_free_gpu():
@@ -199,9 +201,16 @@ def get_parameter_count(model):
 print(f"\nModel created:")
 print(f"  Parameters: {get_parameter_count(cnep_):,}")
 
-# Compile model if PyTorch >= 2.0
-if torch.__version__ >= "2.0":
-    cnep = torch.compile(cnep_)
+# Compile model if PyTorch >= 2.0 and Python >= 3.10
+# torch.compile requires Python 3.10+ and PyTorch 2.0+
+import sys
+if sys.version_info >= (3, 10) and hasattr(torch, 'compile'):
+    try:
+        cnep = torch.compile(cnep_)
+        print("  Model compiled with torch.compile()")
+    except Exception as e:
+        print(f"  torch.compile() failed: {e}, using eager mode")
+        cnep = cnep_
 else:
     cnep = cnep_
 

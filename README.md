@@ -105,5 +105,30 @@ However, most of the code should run cleanly with Python 3.8+ and Pytorch 2+. I 
     1. Files with .ipynb extension are good for inspection & visualization
     2. Files with .py extension are used to run the code on a remote server (an HPC, for example).
 
+### 🆕 Training with Tactile Data (NEW!)
+**Use tactile images and 3D force as conditional inputs for trajectory learning:**
+
+If you have a robot tactile dataset with:
+- Robot end-effector trajectories (3D positions)
+- Tactile images (000.jpg, 001.jpg, ...)
+- 3D force measurements (in CSV files)
+
+You can now train CNEP/CNMP models with this data! See:
+- 📖 **English Guide**: [training_examples/TACTILE_TRAINING_GUIDE.md](training_examples/TACTILE_TRAINING_GUIDE.md)
+- 📖 **中文指南**: [training_examples/TACTILE_TRAINING_GUIDE_CN.md](training_examples/TACTILE_TRAINING_GUIDE_CN.md)
+- 📓 **Example Notebook**: [training_examples/tactile_training_example.ipynb](training_examples/tactile_training_example.ipynb)
+
+Quick start:
+```bash
+# Generate example data
+python data/generate_example_tactile_data.py
+
+# Test data loader
+python data/test_tactile_data_loader.py
+
+# Train CNEP with tactile data
+python training_examples/train_cnep_on_tactile.py
+```
+
 If you use the code in your work, kindly consider citing:
 Y. Yildirim and E. Ugur, "Conditional Neural Expert Processes for Learning Movement Primitives From Demonstration," in IEEE Robotics and Automation Letters, vol. 9, no. 12, pp. 10732-10739, Dec. 2024, doi: 10.1109/LRA.2024.3477169.
